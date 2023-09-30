@@ -1,3 +1,4 @@
+# GameLoop is a in a seperate file called game_loop.py
 from game_loop import GameLoop
 import pygame
 import math
