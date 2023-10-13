@@ -1,0 +1,75 @@
+import pygame,sys,math,random
+import pygame_widgets
+import colorsys
+from pygame import gfxdraw
+from pygame_widgets.slider import Slider
+
+
+pygame.init()
+
+def size(width,height):
+    screen = pygame.display.set_mode((width,height))
+    return screen
+
+def title(caption):
+    pygame.display.set_caption(caption)
+
+
+def close_on_click(event):
+    if event.type == pygame.QUIT:
+        pygame.quit()
+        sys.exit()
+
+
+
+def aaline(screen,color,start,end,width=1):
+        angle = math.atan2(end[1]-start[1],end[0]-start[0])
+        length = math.hypot(abs(end[0]-start[0]),abs(end[1]-start[1]))
+        for i in range(int(length)):
+             size = width
+             gfxdraw.aaellipse(screen,int(i*math.cos(angle)+start[0]),int(i*math.sin(angle) +start[1]),size,size,color)
+             gfxdraw.filled_ellipse(screen,int(i*math.cos(angle)+start[0]),int(i*math.sin(angle) +start[1]),size,size,color) 
+
+def random_2d(v):
+     angle = random.random() * (math.pi * 2)
+     v.x = 1 * math.cos(angle)
+     v.y = 1 * math.sin(angle)
+     return v
+
+def limit_vector_magnitude(v, max_magnitude):
+    if v.length() > max_magnitude:
+        v.scale_to_length(max_magnitude)
+     
+
+
+def createSlider(screen,x,y,width,height,min=1,max=99,step=1):
+     slider = Slider(screen,x,y,width,height,min=min,max=max,step=step)
+     return slider
+
+def hsla_to_rgba(hsla_color):
+    h, s, l, a = hsla_color
+    r, g, b = colorsys.hls_to_rgb(h, l, s)
+    return int(r * 255), int(g * 255), int(b * 255), int(a * 255)
+
+def hsl_to_rgb(hsla_color):
+    h, s, l = hsla_color
+    r, g, b = colorsys.hls_to_rgb(h, l, s)
+    return int(r * 255), int(g * 255), int(b * 255)
+
+def hsb_to_rgb(h, s, b):
+    v = b + s * min(b, 1 - b)
+    if v == 0:
+        return 0, 0, 0
+    else:
+        r = (2 * b - v) * h / v / 6
+        g = (2 * b - v) * (1 - h / v / 6)
+        b = (v - b)
+        return int(r * 255), int(g * 255), int(b * 255)
+
+
+def widget_update(events):
+     pygame_widgets.update(events)
+    
+
+def game_update():
+    pygame.display.update()
